@@ -3,4 +3,5 @@
 *.out
 *.exe
 *.log
+test_*.*    
 
