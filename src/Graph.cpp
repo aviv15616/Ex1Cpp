@@ -1,126 +1,151 @@
 #include "Graph.h"
-#include "Algorithms.h"
 #include <iostream>
-#include <stdexcept> 
-#include <sstream>
+#include <stdexcept>
 
 namespace graph {
 
-    Graph::Graph(int vertices) : numVertices(vertices) {
-        adjList = new Node *[numVertices];
-        for (int i = 0; i < numVertices; i++) {
-            adjList[i] = nullptr;
+// **Constructor: Initializes adjacency list**
+Graph::Graph(int vertices) : numVertices(vertices) {
+    if (vertices <= 0) {
+        throw std::invalid_argument("Graph must have at least one vertex.");
+    }
+    adjList = new Node*[numVertices]();
+}
+
+// **Destructor: Cleans up allocated memory**
+Graph::~Graph() {
+    for (int i = 0; i < numVertices; i++) {
+        Node* current = adjList[i];
+        while (current) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
         }
     }
+    delete[] adjList;
+}
 
-    Graph::~Graph() {
-        for (int i = 0; i < numVertices; i++) {
-            Node *current = adjList[i];
-            while (current) {
-                Node *temp = current;
-                current = current->next;
-                delete temp;
-            }
-        }
-        delete[] adjList;  // ✅ Correct indentation
-    }
-
-    void Graph::addEdge(int src, int dst, int weight) {
-        if (!isValidEdge(src, dst)) {
-            std::ostringstream oss;
-            oss << "Invalid edge: src = " << src << ", dst = " << dst 
-                << " (vertices must be distinct and within [0, " << numVertices - 1 << "])";
-            throw std::out_of_range(oss.str());
-        }
-        if (isEdgeExist(src, dst)) {
-            std::ostringstream oss;
-            oss << "Edge already exists between vertex " << src << " and vertex " << dst;
-            throw std::invalid_argument(oss.str());
-        }
-        // Add edge src -> dst
-        Node* newNode = new Node{dst, weight, adjList[src]};
-        adjList[src] = newNode;
-
-        // Add edge dst -> src (undirected graph)
-        newNode = new Node{src, weight, adjList[dst]};
-        adjList[dst] = newNode;
-    }
-
-    void Graph::removeEdge(int src, int dst) {
-        if (!isValidEdge(src, dst)) {
-            std::ostringstream oss;
-            oss << "Invalid edge: src = " << src << ", dst = " << dst
-                << " (vertices must be distinct and within [0, " << numVertices - 1 << "])";
-            throw std::out_of_range(oss.str());
-        }
-        if (!isEdgeExist(src, dst)) {
-            std::ostringstream oss;
-            oss << "Edge doesn't exist between vertex " << src << " and vertex " << dst;
-            throw std::invalid_argument(oss.str());
-        }
-
-        removeNode(src, dst);
-        removeNode(dst, src);
-    }
-    
-    void Graph::printGraph() {
-        for (int i = 0; i < numVertices; i++) {
-            Node* curr = adjList[i];
-            std::cout << i << " →";  
-            while (curr) {
-                std::cout << " (" << curr->neighbor << ", " << curr->weight << ")";
-                if (curr->next) std::cout << " ,"; 
-                curr = curr->next;
-            }
-    
-            std::cout << std::endl;
-        }
-    }
-
-    bool Graph::isValidEdge(int src, int dst) {
-        return !(src == dst || src >= numVertices || dst >= numVertices || src < 0 || dst < 0);
-    }
-
-    bool Graph::isEdgeExist(int src, int dst) {
-        if (adjList[src] == nullptr) return false;  // Prevent segmentation fault
-        Node* temp = adjList[src];
-        while (temp) {
-            if (temp->neighbor == dst) return true;
-            temp = temp->next;
-        }
+// **Checks if an edge already exists**
+bool Graph::isEdgeExist(int src, int dst) {
+    if (src < 0 || src >= numVertices || adjList[src] == nullptr) {
         return false;
     }
 
-    void Graph::removeNode(int from, int toRemove) {
-        if (adjList[from] == nullptr) {
-            std::ostringstream oss;
-            oss << "Error: Attempted to remove node " << toRemove 
-                << " from vertex " << from << ", but vertex " << from 
-                << " has no edges.";
-            throw std::runtime_error(oss.str());
+    Node* curr = adjList[src];
+    while (curr) {
+        if (curr->vertex == dst) {
+            return true;
         }
-    
-        Node* prev = nullptr;
-        Node* curr = adjList[from];
-    
-        while (curr) {
-            if (curr->neighbor == toRemove) {
-                if (prev) {
-                    prev->next = curr->next;  // Bypass current node
-                } else {
-                    adjList[from] = curr->next;  // If it's the head, update the head
-                }
-                delete curr;  // Free memory
-                return;  // Exit immediately after deleting
+        curr = curr->next;
+    }
+    return false;
+}
+
+// **Adds an edge to the graph (undirected)**
+void Graph::addEdge(int src, int dst, int weight) {
+    if (src == dst || src < 0 || dst < 0 || src >= numVertices || dst >= numVertices) {
+        throw std::out_of_range("Invalid edge");
+    }
+    if (isEdgeExist(src, dst)) {
+        throw std::invalid_argument("Edge already exists.");
+    }
+
+    // Add edge src -> dst
+    Node* newNode = new Node{dst, weight, adjList[src]};
+    adjList[src] = newNode;
+
+    // Add edge dst -> src
+    newNode = new Node{src, weight, adjList[dst]};
+    adjList[dst] = newNode;
+}
+
+// **Removes an edge from the graph**
+void Graph::removeEdge(int src, int dst) {
+    if (src == dst || src < 0 || dst < 0 || src >= numVertices || dst >= numVertices) {
+        throw std::out_of_range("Invalid edge");
+    }
+    if (!isEdgeExist(src, dst)) {
+        throw std::invalid_argument("Edge does not exist.");
+    }
+
+    removeNode(src, dst);
+    removeNode(dst, src);
+}
+
+// **Helper function to remove a node from adjacency list**
+void Graph::removeNode(int from, int toRemove) {
+    if (!adjList[from]) return;
+
+    Node* prev = nullptr;
+    Node* curr = adjList[from];
+
+    while (curr) {
+        if (curr->vertex == toRemove) {
+            if (prev) {
+                prev->next = curr->next;
+            } else {
+                adjList[from] = curr->next;
             }
-            prev = curr;
+            delete curr;
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+}
+
+// **Prints the graph as an adjacency list**
+void Graph::printGraph() {
+    for (int i = 0; i < numVertices; i++) {
+        if (!adjList[i]) continue;  // **Fix: Skip empty adjacency lists**
+        
+        Node* curr = adjList[i];
+        std::cout << i << " → ";
+        
+        while (curr) {
+            std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
+            if (curr->next) std::cout << " -> ";
             curr = curr->next;
         }
-    
-        // If we reach here, the node was not found
-        std::ostringstream oss;
-        oss << "Error: Node " << toRemove << " not found in adjacency list of vertex " << from;
-        throw std::invalid_argument(oss.str());
+        std::cout << std::endl;
     }
-    
+}
+
+// **Returns the total number of edges (undirected)**
+int Graph::getNumEdges() const {
+    int count = 0;
+    for (int i = 0; i < numVertices; i++) {
+        Node* curr = adjList[i];
+        while (curr) {
+            if (curr->vertex > i) count++; // Avoid counting duplicates
+            curr = curr->next;
+        }
+    }
+    return count;
+}
+
+// **Retrieves all edges as an array of (src, dst, weight)**
+void Graph::getEdges(int** edgesArray, int& numEdges) const {
+    numEdges = getNumEdges();
+    if (numEdges == 0) {
+        *edgesArray = nullptr;
+        return;
+    }
+
+    *edgesArray = new int[numEdges * 3]; // Store edges as triples (src, dst, weight)
+
+    int index = 0;
+    for (int i = 0; i < numVertices; i++) {
+        Node* curr = adjList[i];
+        while (curr) {
+            if (curr->vertex > i) { // Avoid duplicates
+                (*edgesArray)[index++] = i; // Source
+                (*edgesArray)[index++] = curr->vertex; // Destination
+                (*edgesArray)[index++] = curr->weight; // Weight
+            }
+            curr = curr->next;
+        }
+    }
+}
+
 }

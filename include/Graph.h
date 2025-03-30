@@ -4,31 +4,34 @@
 namespace graph {
 
 class Graph {
+public:
+    struct Node {
+        int vertex, weight;
+        Node* next;
+    };
+
+private:
+    int numVertices;
+    Node** adjList;
+
+    void removeNode(int from, int toRemove);
 
 public:
     Graph(int vertices);
     ~Graph();
-    void addEdge(int src, int dst, int weight = 1);
+    
+    void addEdge(int src, int dst, int weight);
     void removeEdge(int src, int dst);
     void printGraph();
-    bool isValidEdge(int src, int dst);
     bool isEdgeExist(int src, int dst);
-    void removeNode(int from, int toRemove);
+    
+    int getNumEdges() const; 
+    void getEdges(int** edgesArray, int& numEdges) const; 
 
-
-private:
-    struct Node{
-        int neighbor;
-        int weight;
-        Node* next;
-    };
-
-    int numVertices;
-    Node ** adjList;
-
-
+    Node** getAdjacencyList() const { return adjList; }
+    int getNumVertices() const { return numVertices; }
 };
-}
 
+}
 
 #endif

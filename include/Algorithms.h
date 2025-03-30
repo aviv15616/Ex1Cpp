@@ -1,19 +1,20 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
 
+namespace graph {
 
-namespace graph{
+class Graph;
 
-    class Graph;
-
-    class Algorithms{
-
+class Algorithms {
+public:
     static Graph bfs(Graph& g, int start);
     static Graph dfs(Graph& g, int start);
     static Graph dijkstra(Graph& g, int start);
     static Graph prim(Graph& g, int start);
-    static Graph kruskal(Graph& g, int start);
+    static Graph kruskal(Graph& g);
 
-    };
+};
+
 }
+
 #endif
