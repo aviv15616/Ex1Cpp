@@ -39,22 +39,23 @@ Graph Algorithms::bfs(Graph& g, int start) {
 /// **DFS Algorithm**
 Graph Algorithms::dfs(Graph& g, int start) {
     int n = g.getNumVertices();
-    bool* visited = new bool[n]{false};
+    bool* visited = new bool[n]{false}; 
     Graph dfsTree(n);
-    PriorityQueue pq(n);
+    Queue queue(n);  // Using queue, but simulating stack behavior
 
-    pq.insert(start, 0);
+    queue.push(start);  
 
-    while (!pq.isEmpty()) {
-        int node = pq.extractMin();
+    while (!queue.isEmpty()) {
+        int node = queue.popBack();  // Simulating stack (LIFO) behavior
+        
         if (!visited[node]) {
             visited[node] = true;
-            Graph::Node* current = g.getAdjacencyList()[node];
 
+            Graph::Node* current = g.getAdjacencyList()[node];
             while (current) {
                 if (!visited[current->vertex]) {
                     dfsTree.addEdge(node, current->vertex, current->weight);
-                    pq.insert(current->vertex, current->weight);
+                    queue.push(current->vertex);  // Push to simulate stack behavior
                 }
                 current = current->next;
             }
@@ -64,12 +65,21 @@ Graph Algorithms::dfs(Graph& g, int start) {
     delete[] visited;
     return dfsTree;
 }
-
-/// **Dijkstra’s Algorithm**
 Graph Algorithms::dijkstra(Graph& g, int start) {
+    // Check for negative weights in the graph
+    if (g.containsNegative()) {
+        throw std::invalid_argument("Dijkstra's algorithm cannot be used with negative edge weights.");
+    }
+
     int n = g.getNumVertices();
     int* distances = new int[n];
-    for (int i = 0; i < n; ++i) distances[i] = 1e9;
+    int* parent = new int[n]; // Track the shortest path tree
+
+    // Initialize distances and parent arrays
+    for (int i = 0; i < n; ++i) {
+        distances[i] = 1e9;
+        parent[i] = -1; // No parent initially
+    }
 
     Graph dijkstraTree(n);
     PriorityQueue pq(n);
@@ -77,26 +87,45 @@ Graph Algorithms::dijkstra(Graph& g, int start) {
     distances[start] = 0;
     pq.insert(start, 0);
 
+    // Main Dijkstra algorithm loop
     while (!pq.isEmpty()) {
         int node = pq.extractMin();
-        Graph::Node* current = g.getAdjacencyList()[node];
 
+        Graph::Node* current = g.getAdjacencyList()[node];
         while (current) {
             int neighbor = current->vertex;
             int newDist = distances[node] + current->weight;
-
             if (newDist < distances[neighbor]) {
                 distances[neighbor] = newDist;
-                dijkstraTree.addEdge(node, neighbor, current->weight);
-                pq.decreaseKey(neighbor, newDist);
+                parent[neighbor] = node;  // Track parent for shortest path
+                pq.insert(neighbor, newDist);
             }
             current = current->next;
         }
     }
 
+    // Rebuild the shortest path tree from parent[] information
+    for (int i = 0; i < n; ++i) {
+        if (parent[i] != -1) {
+            // Look in the parent's adjacency list for the edge leading to i
+            Graph::Node* current = g.getAdjacencyList()[parent[i]];
+            while (current) {
+                if (current->vertex == i) {
+                    // Use addDirectedEdge to add only the parent->child edge
+                    dijkstraTree.addDirectedEdge(parent[i], i, current->weight);
+                    break;
+                }
+                current = current->next;
+            }
+        }
+    }
+
     delete[] distances;
+    delete[] parent;
     return dijkstraTree;
 }
+
+
 
 /// **Prim’s Algorithm**
 Graph Algorithms::prim(Graph& g, int start) {

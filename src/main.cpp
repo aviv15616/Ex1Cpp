@@ -27,7 +27,7 @@ void testBFS_DFS(Graph& g) {
     Graph bfsTree = Algorithms::bfs(g, 0);
     bfsTree.printGraph();
 
-    std::cout << "\n===== DFS Traversal from Node 0 (Using Queue instead of Stack) =====\n";
+    std::cout << "\n===== DFS Traversal from Node 0\n";
     Graph dfsTree = Algorithms::dfs(g, 0);  // Fix: Uses Queue instead
     dfsTree.printGraph();
 }

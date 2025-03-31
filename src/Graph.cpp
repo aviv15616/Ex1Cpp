@@ -5,7 +5,7 @@
 namespace graph {
 
 // **Constructor: Initializes adjacency list**
-Graph::Graph(int vertices) : numVertices(vertices) {
+Graph::Graph(int vertices) : numVertices(vertices), hasNegative(false) {
     if (vertices <= 0) {
         throw std::invalid_argument("Graph must have at least one vertex.");
     }
@@ -30,7 +30,6 @@ bool Graph::isEdgeExist(int src, int dst) {
     if (src < 0 || src >= numVertices || adjList[src] == nullptr) {
         return false;
     }
-
     Node* curr = adjList[src];
     while (curr) {
         if (curr->vertex == dst) {
@@ -49,7 +48,7 @@ void Graph::addEdge(int src, int dst, int weight) {
     if (isEdgeExist(src, dst)) {
         throw std::invalid_argument("Edge already exists.");
     }
-
+    
     // Add edge src -> dst
     Node* newNode = new Node{dst, weight, adjList[src]};
     adjList[src] = newNode;
@@ -57,6 +56,24 @@ void Graph::addEdge(int src, int dst, int weight) {
     // Add edge dst -> src
     newNode = new Node{src, weight, adjList[dst]};
     adjList[dst] = newNode;
+    
+    if (weight < 0) {
+        hasNegative = true;
+    }
+}
+
+// **New: Adds a directed edge (only one direction)**
+void Graph::addDirectedEdge(int src, int dst, int weight) {
+    if (src < 0 || dst < 0 || src >= numVertices || dst >= numVertices) {
+        throw std::out_of_range("Invalid edge");
+    }
+    // We don't check for existence here since the dijkstra tree is built in a controlled way.
+    Node* newNode = new Node{dst, weight, adjList[src]};
+    adjList[src] = newNode;
+}
+
+bool Graph::containsNegative(){
+    return hasNegative;
 }
 
 // **Removes an edge from the graph**
@@ -67,7 +84,6 @@ void Graph::removeEdge(int src, int dst) {
     if (!isEdgeExist(src, dst)) {
         throw std::invalid_argument("Edge does not exist.");
     }
-
     removeNode(src, dst);
     removeNode(dst, src);
 }
@@ -75,10 +91,8 @@ void Graph::removeEdge(int src, int dst) {
 // **Helper function to remove a node from adjacency list**
 void Graph::removeNode(int from, int toRemove) {
     if (!adjList[from]) return;
-
     Node* prev = nullptr;
     Node* curr = adjList[from];
-
     while (curr) {
         if (curr->vertex == toRemove) {
             if (prev) {
@@ -98,10 +112,8 @@ void Graph::removeNode(int from, int toRemove) {
 void Graph::printGraph() {
     for (int i = 0; i < numVertices; i++) {
         if (!adjList[i]) continue;  // **Fix: Skip empty adjacency lists**
-        
         Node* curr = adjList[i];
         std::cout << i << " → ";
-        
         while (curr) {
             std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
             if (curr->next) std::cout << " -> ";
@@ -131,9 +143,7 @@ void Graph::getEdges(int** edgesArray, int& numEdges) const {
         *edgesArray = nullptr;
         return;
     }
-
     *edgesArray = new int[numEdges * 3]; // Store edges as triples (src, dst, weight)
-
     int index = 0;
     for (int i = 0; i < numVertices; i++) {
         Node* curr = adjList[i];
@@ -148,4 +158,4 @@ void Graph::getEdges(int** edgesArray, int& numEdges) const {
     }
 }
 
-}
+}  // namespace graph
