@@ -5,7 +5,6 @@ class Queue {
     private:
         int capacity; 
         int front;
-        int rear;
         int size;
         int* arr;
     
@@ -17,7 +16,6 @@ public:
     int pop();
     bool isEmpty();
     bool isFull();
-    int popBack();
 };
 
 #endif

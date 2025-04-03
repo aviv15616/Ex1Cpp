@@ -13,23 +13,38 @@ public:
 private:
     int numVertices;
     Node** adjList;
-    bool hasNegative; 
+    int howManyNegatives;
+
+    int* discoveryOrder;
+    int* parent;
+
+
 
     void removeNode(int from, int toRemove);
+    bool isEdgeExist(int src, int dst);
+    bool isValidEdge(int src, int dst);
+    bool isValidVertex(int v) const;
+    int getNumEdges() const;
+ 
 
 public:
     Graph(int vertices);
     ~Graph();
-    
+
     void addEdge(int src, int dst, int weight);
-    void addDirectedEdge(int src, int dst, int weight);  // <-- New method declaration
     void removeEdge(int src, int dst);
     void printGraph();
-    bool isEdgeExist(int src, int dst);
-    bool containsNegative();
-    
-    int getNumEdges() const; 
-    void getEdges(int** edgesArray, int& numEdges) const; 
+
+    void addDirectedEdge(int src, int dst, int weight);
+    bool isNegative();
+    void getEdges(int** edgesArray, int& numEdges) const;
+
+    void setDiscoveryOrder(int* order);
+    const int* getDiscoveryOrder() const { return discoveryOrder; }
+
+    void setParentArray(int* p);
+    const int* getParentArray() const { return parent; }
+
 
     Node** getAdjacencyList() const { return adjList; }
     int getNumVertices() const { return numVertices; }

@@ -1,0 +1,27 @@
+{
+  "search.exclude": {
+    "**/.vscode": true,
+    "**/.history": true,
+    "**/history": true,
+    "**/backup": true,
+    "**/*.bak": true,
+    "**/*.tmp": true,
+    "**/*.log": true,
+    "**/build": true,
+    "**/out": true,
+    "**/*.o": true,
+    "**/*.exe": true
+  },
+  "files.exclude": {
+    "**/.vscode": true,
+    "**/.history": true,
+    "**/history": true,
+    "**/backup": true,
+    "**/*.bak": true,
+    "**/build": true
+  },
+  "files.associations": {
+    "new": "cpp",
+    "iostream": "cpp"
+  }
+}

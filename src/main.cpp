@@ -7,17 +7,8 @@
 
 using namespace graph;
 
-void testGraph() {
+void testGraph(Graph& g) {
     std::cout << "\n===== Graph Construction & Printing =====\n";
-
-    Graph g(6);
-    g.addEdge(0, 1, 4);
-    g.addEdge(0, 2, 3);
-    g.addEdge(1, 2, 1);
-    g.addEdge(1, 3, 2);
-    g.addEdge(2, 3, 4);
-    g.addEdge(3, 4, 2);
-    g.addEdge(4, 5, 6);
 
     g.printGraph();
 }
@@ -28,8 +19,27 @@ void testBFS_DFS(Graph& g) {
     bfsTree.printGraph();
 
     std::cout << "\n===== DFS Traversal from Node 0\n";
-    Graph dfsTree = Algorithms::dfs(g, 0);  // Fix: Uses Queue instead
+    Graph dfsTree = Algorithms::dfs(g, 0); 
     dfsTree.printGraph();
+}
+void testPrim(Graph& g) {
+    std::cout << "\n===== Prim's MST =====\n";
+    Graph mst = Algorithms::prim(g, 0);
+    bool empty = true;
+    for (int i = 0; i < mst.getNumVertices(); ++i) {
+    if (mst.getAdjacencyList()[i] != nullptr) {
+        empty = false;
+        break;
+             }
+            }
+        if (empty) {
+          std::cout << "⚠️  MST is empty – no edges added.\n";
+        } else {
+       std::cout << "✅ MST was built successfully.\n";
+        mst.printGraph();
+        }
+
+         
 }
 
 void testDijkstra(Graph& g) {
@@ -38,17 +48,26 @@ void testDijkstra(Graph& g) {
     dijkstraTree.printGraph();
 }
 
-void testPrim(Graph& g) {
-    std::cout << "\n===== Prim's MST =====\n";
-    Graph mst = Algorithms::prim(g, 0);
-    mst.printGraph();
-}
-
 void testKruskal(Graph& g) {
     std::cout << "\n===== Kruskal's MST =====\n";
     Graph mst = Algorithms::kruskal(g);
-    mst.printGraph();
+
+    bool empty = true;
+    for (int i = 0; i < mst.getNumVertices(); ++i) {
+        if (mst.getAdjacencyList()[i] != nullptr) {
+            empty = false;
+            break;
+        }
+    }
+
+    if (empty) {
+        std::cout << "⚠️  MST is empty – no edges added.\n";
+    } else {
+        std::cout << "✅ MST was built successfully.\n";
+        mst.printGraph();
+    }
 }
+
 
 void testQueue() {
     std::cout << "\n===== Testing Queue =====\n";
@@ -83,21 +102,20 @@ void testUnionFind() {
 }
 
 int main() {
-    testGraph();
+    
+    Graph g(5);
+    g.addEdge(0, 1, 2);
+    g.addEdge(0, 2, 1);
+    g.addEdge(1, 3, 1);
+    g.addEdge(2, 3, 1);
+    g.addEdge(3, 4, 5);
 
-    Graph g(6);
-    g.addEdge(0, 1, 4);
-    g.addEdge(0, 2, 3);
-    g.addEdge(1, 2, 1);
-    g.addEdge(1, 3, 2);
-    g.addEdge(2, 3, 4);
-    g.addEdge(3, 4, 2);
-    g.addEdge(4, 5, 6);
 
+    testGraph(g);
     testBFS_DFS(g);
     testDijkstra(g);
-    testPrim(g);
     testKruskal(g);
+    testPrim(g);
     testQueue();
     testPriorityQueue();
     testUnionFind();
