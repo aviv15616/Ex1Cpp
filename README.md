@@ -6,22 +6,20 @@ Email: anksilae@gmail.com
 
 ## Overview
 
-This project implements an undirected graph using an **adjacency list** in C++, strictly without using the STL (no `vector`, `stack`, etc.).  
-The focus is on manual memory management, algorithm design, and building supporting data structures from scratch.
-
 The project includes the following components:
 
 - **Graph** – Represents an undirected graph using a linked list–based adjacency list. Supports operations like `addEdge`, `removeEdge`, and `printGraph`. The number of vertices is fixed upon graph creation.
-  
-- **Algorithms** – Contains static methods implementing classical graph algorithms:
-  - `bfs(Graph& g, int start)` – Performs a **Breadth-First Search** from a given start node and returns a **directed rooted tree** representing the BFS traversal. The edges are directed to reflect the parent-to-child relationship.
-  - `dfs(Graph& g, int start)` – Performs a **Depth-First Search**, returning a **directed rooted tree (or forest)** that includes only **tree edges**, showing the DFS traversal structure.
-  - `dijkstra(Graph& g, int start)` – Computes **shortest paths** from the start node using Dijkstra's algorithm. Returns a **directed tree** rooted at the start node with the minimal-weight paths to each reachable vertex.
-  - `prim(Graph& g, int start)` – Computes a **Minimum Spanning Tree** using Prim's algorithm. The result is an **undirected** tree connecting all vertices with minimal total weight.
-  - `kruskal(Graph& g)` – Computes a **Minimum Spanning Tree** using Kruskal’s algorithm, based on a Union-Find structure to detect cycles.
+- 
+- **Algorithms** – Contains static methods implementing classical graph algorithms from a given undirected graph:
+  - **BFS** – Performs a **Breadth-First Search** from a given start node and returns a **directed rooted tree/forest** representing the BFS traversal. 
+  - **DFS** – Performs a **Depth-First Search**, returning a **directed rooted tree/forest** that includes only **tree edges**, showing the DFS traversal structure.
+  - **Dijkstra** – Computes **shortest paths** from the start node using Dijkstra's algorithm. Returns a **directed rooted tree** rooted at the start node with the minimal-weight paths to each reachable vertex.
+  - **Prim** – Computes a **Minimum Spanning Tree** using Prim's algorithm. The result is an **undirected** tree connecting all vertices with minimal total weight.
+  - **Kruskal** – Computes a **Minimum Spanning Tree** using Kruskal’s algorithm, based on a Union-Find structure to detect cycles.
 
 - **Data Structures** – The following basic data structures were implemented without STL:
   - `Queue` – For BFS
+  - `Stack` - For DFS
   - `PriorityQueue` – For Dijkstra and Prim (min-heap based)
   - `UnionFind` – For Kruskal’s algorithm (union by rank and path compression)
 
