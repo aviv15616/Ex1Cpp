@@ -1,3 +1,5 @@
+// Author: anksilae@gmail.com
+
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
 
@@ -22,6 +24,7 @@ public:
     void insert(int key, int value);
     int extractMin();
     void decreaseKey(int key, int newValue);
+    void print() const;
 };
 
 #endif

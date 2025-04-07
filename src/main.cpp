@@ -1,108 +1,139 @@
-#include "Graph.h"
-#include "Algorithms.h"
-#include "Queue.h"
-#include "PriorityQueue.h"
-#include "UnionFind.h"
+// Author: anksilae@gmail.com
+// Demo file to showcase the main functionalities of graph structures & algorithms
+
+#include "Graph.hpp"
+#include "Algorithms.hpp"
+#include "Queue.hpp"
+#include "PriorityQueue.hpp"
+#include "UnionFind.hpp"
+#include "Stack.hpp"
 #include <iostream>
 
 using namespace graph;
 
-void testGraph(Graph& g) {
-    std::cout << "\n===== Graph Construction & Printing =====\n";
-
+void showGraph(Graph &g) {
+    std::cout << "\n🔹 Graph structure:\n";
     g.printGraph();
 }
 
-void testBFS_DFS(Graph& g) {
-    std::cout << "\n===== BFS Traversal from Node 0 =====\n";
-    Graph bfsTree = Algorithms::bfs(g, 0);
-    bfsTree.printGraph();
-
-    std::cout << "\n===== DFS Traversal from Node 0\n";
-    Graph dfsTree = Algorithms::dfs(g, 0); 
-    dfsTree.printGraph();
+void showBFS(Graph &g) {
+    std::cout << "\n🔹 BFS from node 0:\n";
+    Graph bfs = Algorithms::bfs(g, 0);
+    bfs.printGraph();
 }
-void testPrim(Graph& g) {
-    std::cout << "\n===== Prim's MST =====\n";
+
+void showDFS(Graph &g) {
+    std::cout << "\n🔹 DFS from node 0:\n";
+    Graph dfs = Algorithms::dfs(g, 0);
+    dfs.printGraph();
+}
+
+void showPrim(Graph &g) {
+    std::cout << "\n🔹 Prim's MST:\n";
     Graph mst = Algorithms::prim(g, 0);
-    bool empty = true;
-    for (int i = 0; i < mst.getNumVertices(); ++i) {
-    if (mst.getAdjacencyList()[i] != nullptr) {
-        empty = false;
-        break;
-             }
-            }
-        if (empty) {
-          std::cout << "⚠️  MST is empty – no edges added.\n";
-        } else {
-       std::cout << "✅ MST was built successfully.\n";
-        mst.printGraph();
-        }
-
-         
+    mst.printGraph();
 }
 
-void testDijkstra(Graph& g) {
-    std::cout << "\n===== Dijkstra's Algorithm from Node 0 =====\n";
-    Graph dijkstraTree = Algorithms::dijkstra(g, 0);
-    dijkstraTree.printGraph();
+void showDijkstra(Graph &g) {
+    std::cout << "\n🔹 Dijkstra from node 0:\n";
+    Graph dijkstra = Algorithms::dijkstra(g, 0);
+    dijkstra.printGraph();
 }
 
-void testKruskal(Graph& g) {
-    std::cout << "\n===== Kruskal's MST =====\n";
+void showKruskal(Graph &g) {
+    std::cout << "\n🔹 Kruskal's MST:\n";
     Graph mst = Algorithms::kruskal(g);
-
-    bool empty = true;
-    for (int i = 0; i < mst.getNumVertices(); ++i) {
-        if (mst.getAdjacencyList()[i] != nullptr) {
-            empty = false;
-            break;
-        }
-    }
-
-    if (empty) {
-        std::cout << "⚠️  MST is empty – no edges added.\n";
-    } else {
-        std::cout << "✅ MST was built successfully.\n";
-        mst.printGraph();
-    }
+    mst.printGraph();
 }
 
-
-void testQueue() {
-    std::cout << "\n===== Testing Queue =====\n";
+void demoQueue() {
+    std::cout << "\n🔹 Queue operations:\n";
     Queue q(5);
+
+    std::cout << "🟢 Enqueuing 10...\n";
     q.push(10);
+    q.print();
+
+    std::cout << "🟢 Enqueuing 20...\n";
     q.push(20);
+    q.print();
+
+    std::cout << "🟢 Enqueuing 30...\n";
     q.push(30);
-    std::cout << "Dequeued: " << q.pop() << "\n";
-    std::cout << "Dequeued: " << q.pop() << "\n";
+    q.print();
+
+    std::cout << "🔴 Dequeuing...\n";
+    std::cout << "Popped: " << q.pop() << "\n";
+    q.print();
+
+    std::cout << "🔴 Dequeuing...\n";
+    std::cout << "Popped: " << q.pop() << "\n";
+    q.print();
 }
 
-void testPriorityQueue() {
-    std::cout << "\n===== Testing PriorityQueue =====\n";
+void demoPriorityQueue() {
+    std::cout << "\n🔹 PriorityQueue operations:\n";
     PriorityQueue pq(5);
     pq.insert(1, 50);
     pq.insert(2, 30);
     pq.insert(3, 20);
-    pq.decreaseKey(2, 10);  // Fix: Ensure key exists before decreasing
-
+    std::cout << "Priority queue after inserts: ";
+    pq.print();
+    pq.decreaseKey(2, 10);
+    std::cout << "After decreaseKey(2,10): ";
+    pq.print();
     std::cout << "Extracted Min: " << pq.extractMin() << "\n";
     std::cout << "Extracted Min: " << pq.extractMin() << "\n";
+    std::cout << "Priority queue after extractions: ";
+    pq.print();
 }
 
-void testUnionFind() {
-    std::cout << "\n===== Testing Union-Find =====\n";
+void demoUnionFind() {
+    std::cout << "\n🔹 Union-Find operations:\n";
     UnionFind uf(5);
+
+    std::cout << "Initial connected sets:\n";
+    uf.print();
+
     uf.unionSet(0, 1);
+    std::cout << "After union(0,1):\n";
+    uf.print();
+
     uf.unionSet(1, 2);
-    
-    std::cout << "Are 0 and 2 connected? " << (uf.isConnected(0, 2) ? "Yes" : "No") << "\n";
-    std::cout << "Are 3 and 4 connected? " << (uf.isConnected(3, 4) ? "Yes" : "No") << "\n";
+    std::cout << "After union(1,2):\n";
+    uf.print();
+
+    std::cout << (uf.isConnected(0, 2) ? "0 ↔ 2? Yes\n" : "0 ↔ 2? No\n");
+    std::cout << (uf.isConnected(3, 4) ? "3 ↔ 4? Yes\n" : "3 ↔ 4? No\n");
 }
+
+void demoStack() {
+    std::cout << "\n🔹 Stack operations:\n";
+    Stack s(5);
+
+    std::cout << "🟢 Pushing 100...\n";
+    s.push(100);
+    s.print();
+
+    std::cout << "🟢 Pushing 200...\n";
+    s.push(200);
+    s.print();
+
+    std::cout << "🟢 Pushing 300...\n";
+    s.push(300);
+    s.print();
+
+    std::cout << "🔴 Popping...\n";
+    std::cout << "Popped: " << s.pop() << "\n";
+    s.print();
+
+    std::cout << "🔴 Popping...\n";
+    std::cout << "Popped: " << s.pop() << "\n";
+    s.print();
+}
+
 
 int main() {
-    
     Graph g(5);
     g.addEdge(0, 1, 2);
     g.addEdge(0, 2, 1);
@@ -110,15 +141,17 @@ int main() {
     g.addEdge(2, 3, 1);
     g.addEdge(3, 4, 5);
 
+    showGraph(g);
+    showBFS(g);
+    showDFS(g);
+    showDijkstra(g);
+    showKruskal(g);
+    showPrim(g);
 
-    testGraph(g);
-    testBFS_DFS(g);
-    testDijkstra(g);
-    testKruskal(g);
-    testPrim(g);
-    testQueue();
-    testPriorityQueue();
-    testUnionFind();
+    demoQueue();
+    demoPriorityQueue();
+    demoUnionFind();
+    demoStack();
 
     return 0;
 }

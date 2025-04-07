@@ -1,9 +1,11 @@
-#include "Algorithms.h"
-#include "Graph.h"
-#include "Queue.h"
-#include "Stack.h" 
-#include "PriorityQueue.h"
-#include "UnionFind.h"
+// Author: anksilae@gmail.com
+
+#include "Algorithms.hpp"
+#include "Graph.hpp"
+#include "Queue.hpp"
+#include "Stack.hpp"
+#include "PriorityQueue.hpp"
+#include "UnionFind.hpp"
 #include <iostream>
 
 namespace graph {

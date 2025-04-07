@@ -1,4 +1,7 @@
-#include "Stack.h"
+// Author: anksilae@gmail.com
+
+#include "Stack.hpp"
+#include <iostream>
 #include <stdexcept>
 
 Stack::Stack(int capacity) {
@@ -32,4 +35,12 @@ bool Stack::isEmpty() {
 bool Stack::isFull() {
     return top == capacity - 1;
 }
+void Stack::print() const {
+    std::cout << "[ ";
+    for (int i = top; i >= 0; --i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << "]\n";
+}
+
 

@@ -1,3 +1,5 @@
+// Author: anksilae@gmail.com
+
 #ifndef GRAPH_H
 #define GRAPH_H
 
@@ -10,7 +12,7 @@ public:
         Node* next;
     };
 
-private:
+    public:
     int numVertices;
     Node** adjList;
     int howManyNegatives;
@@ -24,10 +26,10 @@ private:
     bool isEdgeExist(int src, int dst);
     bool isValidEdge(int src, int dst);
     bool isValidVertex(int v) const;
-    int getNumEdges() const;
+
  
 
-public:
+
     Graph(int vertices);
     ~Graph();
 
@@ -35,10 +37,12 @@ public:
     void removeEdge(int src, int dst);
     void printGraph();
 
+    int *getDiscoveryOrder(int *order);
+
     void addDirectedEdge(int src, int dst, int weight);
     bool isNegative();
     void getEdges(int** edgesArray, int& numEdges) const;
-
+    int getNumEdges() const;
     void setDiscoveryOrder(int* order);
     const int* getDiscoveryOrder() const { return discoveryOrder; }
 

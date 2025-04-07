@@ -1,4 +1,6 @@
-#include "Graph.h"
+// Author: anksilae@gmail.com
+
+#include "Graph.hpp"
 #include <iostream>
 #include <stdexcept>
 #include <sstream>
@@ -141,62 +143,40 @@ void Graph::setParentArray(int* p) {
 }
 
 void Graph::printGraph() {
-    std::cout << "\n===== Adjacency List " 
-              << (discoveryOrder ? "(by discovery order)" : "") 
+    std::cout << "\n===== Adjacency List "
+              << (discoveryOrder ? "(by discovery order)" : "")
               << " =====\n";
 
     if (discoveryOrder) {
-        // DEBUG: הצג את תוכן discoveryOrder
-        std::cout << "Debug: discoveryOrder = [ ";
-        for (int i = 0; i < numVertices; ++i) {
-            std::cout << discoveryOrder[i] << " ";
-        }
-        std::cout << "]\n\n";
-
-        bool valid = true;
-
-        // בדיקת תקפות הערכים
         for (int i = 0; i < numVertices; ++i) {
             int node = discoveryOrder[i];
-            if (node < 0 || node >= numVertices) {
-                std::cerr << "⚠️  Invalid discoveryOrder[" << i << "] = " << node << "\n";
-                valid = false;
+            std::cout << node << " → ";
+            Node* curr = adjList[node];
+            while (curr) {
+                std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
+                if (curr->next) std::cout << " -> ";
+                curr = curr->next;
             }
+            std::cout << std::endl;
         }
-
-        if (!valid) {
-            std::cerr << "\n❌ discoveryOrder contains invalid entries. Falling back to regular order.\n\n";
-        }
-
-        // הדפסת הרשימה לפי discoveryOrder אם תקין
-        if (valid) {
-            for (int i = 0; i < numVertices; ++i) {
-                int node = discoveryOrder[i];
-                std::cout << node << " → ";
-                Node* curr = adjList[node];
-                while (curr) {
-                    std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
-                    if (curr->next) std::cout << " -> ";
-                    curr = curr->next;
-                }
-                std::cout << std::endl;
+    } else {
+        // הדפסת גרף רגילה לפי סדר אינדקסים
+        for (int i = 0; i < numVertices; ++i) {
+            std::cout << i << " → ";
+            Node* curr = adjList[i];
+            while (curr) {
+                std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
+                if (curr->next) std::cout << " -> ";
+                curr = curr->next;
             }
-            return; // כבר הדפסנו, לא צריך המשך
+            std::cout << std::endl;
         }
-    }
-
-    // fallback: הדפסת גרף רגילה
-    for (int i = 0; i < numVertices; ++i) {
-        std::cout << i << " → ";
-        Node* curr = adjList[i];
-        while (curr) {
-            std::cout << "(" << curr->vertex << ", " << curr->weight << ")";
-            if (curr->next) std::cout << " -> ";
-            curr = curr->next;
-        }
-        std::cout << std::endl;
     }
 }
-
-
+int* Graph::getDiscoveryOrder(int* order) {
+    for (int i = 0; i < numVertices; ++i) {
+        order[i] = discoveryOrder[i];
+    }
+    return order;
+}
 }

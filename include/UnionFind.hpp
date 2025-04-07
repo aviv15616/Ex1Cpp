@@ -1,3 +1,5 @@
+// Author: anksilae@gmail.com
+
 #ifndef UNION_FIND_H
 #define UNION_FIND_H
 
@@ -14,6 +16,9 @@ public:
     int find(int node);
     void unionSet(int u, int v);
     bool isConnected(int u, int v);
+    void print() const;
+    int find(int node) const;
+
 };
 
 #endif

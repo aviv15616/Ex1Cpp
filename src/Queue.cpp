@@ -1,4 +1,7 @@
-#include "Queue.h"
+// Author: anksilae@gmail.com
+
+#include "Queue.hpp"
+#include <iostream>
 #include <stdexcept>
 
 Queue::Queue(int capacity) {
@@ -37,4 +40,12 @@ bool Queue::isEmpty() {
 
 bool Queue::isFull() {
     return size == capacity;
+}
+void Queue::print() const {
+    std::cout << "[ ";
+    for (int i = 0; i < size; ++i) {
+        int index = (front + i) % capacity;
+        std::cout << arr[index] << " ";
+    }
+    std::cout << "]\n";
 }

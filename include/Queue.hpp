@@ -1,3 +1,5 @@
+// Author: anksilae@gmail.com
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -16,6 +18,7 @@ public:
     int pop();
     bool isEmpty();
     bool isFull();
+    void print() const;
 };
 
 #endif

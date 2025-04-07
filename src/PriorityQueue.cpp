@@ -1,4 +1,6 @@
-#include "PriorityQueue.h"
+// Author: anksilae@gmail.com
+
+#include "PriorityQueue.hpp"
 #include <iostream>
 #include <stdexcept>
 
@@ -85,3 +87,34 @@ void PriorityQueue::decreaseKey(int key, int newValue) {
         }
     }
 }
+void PriorityQueue::print() const {
+    // יצירת עותק זמני
+    Node* copy = new Node[size];
+    for (int i = 0; i < size; ++i) {
+        copy[i] = heap[i];
+    }
+
+    // מיון לפי value (ascending)
+    for (int i = 0; i < size - 1; ++i) {
+        int minIdx = i;
+        for (int j = i + 1; j < size; ++j) {
+            if (copy[j].value < copy[minIdx].value) {
+                minIdx = j;
+            }
+        }
+        Node temp = copy[i];
+        copy[i] = copy[minIdx];
+        copy[minIdx] = temp;
+    }
+
+    // הדפסה
+    std::cout << "[ ";
+    for (int i = 0; i < size; ++i) {
+        std::cout << "(" << copy[i].key << ", " << copy[i].value << ") ";
+    }
+    std::cout << "]\n";
+
+    delete[] copy;
+}
+
+

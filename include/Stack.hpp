@@ -1,3 +1,5 @@
+// Author: anksilae@gmail.com
+
 #ifndef STACK_H
 #define STACK_H
 
@@ -15,6 +17,7 @@ public:
     int pop();
     bool isEmpty();
     bool isFull();
+    void print() const;
 };
 
 #endif
