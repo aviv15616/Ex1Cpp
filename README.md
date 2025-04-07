@@ -9,21 +9,19 @@ Email: anksilae@gmail.com
 The project includes the following components:
 
 - **Graph** – Represents an undirected graph using a linked list–based adjacency list. Supports operations like `addEdge`, `removeEdge`, and `printGraph`. The number of vertices is fixed upon graph creation.
-- 
+
 - **Algorithms** – Contains static methods implementing classical graph algorithms from a given undirected graph:
   - **BFS** – Performs a **Breadth-First Search** from a given start node and returns a **directed rooted tree/forest** representing the BFS traversal. 
   - **DFS** – Performs a **Depth-First Search**, returning a **directed rooted tree/forest** that includes only **tree edges**, showing the DFS traversal structure.
   - **Dijkstra** – Computes **shortest paths** from the start node using Dijkstra's algorithm. Returns a **directed rooted tree** rooted at the start node with the minimal-weight paths to each reachable vertex.
-  - **Prim** – Computes a **Minimum Spanning Tree** using Prim's algorithm. The result is an **undirected** tree connecting all vertices with minimal total weight.
-  - **Kruskal** – Computes a **Minimum Spanning Tree** using Kruskal’s algorithm, based on a Union-Find structure to detect cycles.
+  - **Prim** – Computes a **Minimum Spanning Tree** using Prim's algorithm. The result is an **undirected** MST.
+  - **Kruskal** – Computes a **Minimum Spanning Tree** using Kruskal’s algorithm, The result is an **undirected** MST.
 
 - **Data Structures** – The following basic data structures were implemented without STL:
   - `Queue` – For BFS
   - `Stack` - For DFS
   - `PriorityQueue` – For Dijkstra and Prim (min-heap based)
   - `UnionFind` – For Kruskal’s algorithm (union by rank and path compression)
-
-- **Memory Management** – All memory allocations are managed with raw pointers. Copy constructors and destructors are carefully implemented to avoid memory leaks. Verified with `valgrind`.
 
 - **Testing** – Comprehensive **unit tests** are written using the `doctest` framework to cover all functionality and edge cases.
 
