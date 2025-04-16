@@ -17,7 +17,7 @@ Graph Algorithms::bfs(Graph& g, int start) {
     bool* visited = new bool[n]{false};
     int* discoveryOrder = new int[n];
     int* parent = new int[n];
-    int* parentWeight = new int[n]; // לשמירת משקל הקשת מהורה לילד
+    int* parentWeight = new int[n]; 
 
     for (int i = 0; i < n; ++i) {
         parent[i] = -1;
@@ -26,7 +26,7 @@ Graph Algorithms::bfs(Graph& g, int start) {
 
     int discoveryIndex = 0;
 
-    Queue queue(n); // נניח שיש לך מבנה תור פשוט בשם Queue
+    Queue queue(n); 
 
     for (int i = 0; i < n; ++i) {
         int root = (i == 0) ? start : i;
@@ -58,7 +58,7 @@ Graph Algorithms::bfs(Graph& g, int start) {
         }
     }
 
-    // בניית עץ BFS מתוך parent ו־parentWeight
+
     Graph bfsTree(n);
     for (int i = 0; i < n; ++i) {
         if (parent[i] != -1) {
@@ -85,7 +85,7 @@ Graph Algorithms::dfs(Graph& g, int start) {
     bool* visited = new bool[n]{false};
     int* discoveryOrder = new int[n];
     int* parent = new int[n];
-    int* parentWeight = new int[n]; // נשמור את משקל הקשת שהובילה לקודקוד
+    int* parentWeight = new int[n]; 
 
     for (int i = 0; i < n; ++i) {
         parent[i] = -1;
@@ -106,7 +106,7 @@ Graph Algorithms::dfs(Graph& g, int start) {
                     visited[node] = true;
                     discoveryOrder[discoveryIndex++] = node;
 
-                    // ספירת שכנים
+   
                     int count = 0;
                     Graph::Node* curr = g.getAdjacencyList()[node];
                 while (curr) {
@@ -114,7 +114,7 @@ Graph Algorithms::dfs(Graph& g, int start) {
                         curr = curr->next;
                     }
 
-                    // שמירה בסדר הפוך עם משקלים
+              
                     int* neighbors = new int[count];
                     int* weights = new int[count];
                     Graph::Node* curr2 = g.getAdjacencyList()[node];
@@ -126,7 +126,7 @@ Graph Algorithms::dfs(Graph& g, int start) {
                         curr2 = curr2->next;
                     }
 
-                    // דחיפה בסדר הפוך למחסנית
+                 
                     for (int j = count - 1; j >= 0; j--) {
                         int v = neighbors[j];
                         int w = weights[j];
@@ -136,7 +136,7 @@ Graph Algorithms::dfs(Graph& g, int start) {
                             stack.push(v);
                         }
                     }
-
+        
                     delete[] neighbors;
                     delete[] weights;
                 }
@@ -144,7 +144,6 @@ Graph Algorithms::dfs(Graph& g, int start) {
         }
     }
 
-    // בניית עץ DFS עם משקלים מקוריים
     Graph dfsTree(n);
     for (int i = 0; i < n; ++i) {
         if (parent[i] != -1) {

@@ -10,7 +10,7 @@ private:
     };
 
     Node* heap;
-    int* positionMap; // Maps keys to their index in the heap for O(log n) decreaseKey
+    int* positionMap; 
     int capacity, size;
 
     void heapifyUp(int index);
